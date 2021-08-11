@@ -34,7 +34,7 @@ class CreateTable:
                           "prod_type TEXT NOT NULL,"
                           "quantity TEXT NOT NULL)")
         print("product table created successfully")
-        # self.conn.close()
+        self.conn.close()
 
 
 CreateTable()
