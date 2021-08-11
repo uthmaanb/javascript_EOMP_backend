@@ -72,7 +72,7 @@ app.config['MAIL_USERNAME'] = 'cody01101101@gmail.com'
 app.config['MAIL_PASSWORD'] = 'Polonykop100'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-mail = Mail(app)
+# mail = Mail(app)
 
 
 @app.route('/user-registration/', methods=["POST"])
@@ -102,15 +102,25 @@ def user_registration():
             response["message"] = "success"
             response["status_code"] = 201
 
-            msg = Message('Yo Bro', sender='cody01101101@gmail.com', recipients=[email])
-            msg.body = "Welcome " + first_name + ". You have Successfully registered."
-            mail.send(msg)
+            # msg = Message('Yo Bro', sender='cody01101101@gmail.com', recipients=[email])
+            # msg.body = "Welcome " + first_name + ". You have Successfully registered."
+            # mail.send(msg)
 
-        return response and redirect('https://murmuring-everglades-76424.herokuapp.com/show-users')
-
-        # return redirect("")
+        return response and redirect("/emailsent/%s" % email)
     else:
         return "Email not valid. Please enter a valid email address"
+
+
+# app route that sends an email to users who registered
+@app.route('/emailsent/<email>', methods=['GET'])
+def sendemail(email):
+    mail = Mail(app)
+
+    msg = Message('Hello Message', sender='cody01101101@gmail.com', recipients=[email])
+    msg.body = "This is the email body after making some changes"
+    mail.send(msg)
+
+    return "Thank you for registering. An em"
 
 
 @app.route('/show-users/')
