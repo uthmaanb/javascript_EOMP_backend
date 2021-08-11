@@ -1,7 +1,4 @@
-import hmac
 import sqlite3
-from smtplib import SMTPRecipientsRefused, SMTPAuthenticationError
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_mail import Mail, Message
@@ -37,7 +34,7 @@ class CreateTable:
                           "prod_type TEXT NOT NULL,"
                           "quantity TEXT NOT NULL)")
         print("product table created successfully")
-        self.conn.close()
+        # self.conn.close()
 
 
 CreateTable()
@@ -108,6 +105,20 @@ def user_registration():
         return response
 
 
+@app.route('/show-users/')
+def show_users():
+    response = {}
+
+    with sqlite3.connect("shoprite.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users")
+
+        response["status_code"] = 200
+        response["description"] = "Displaying all products successfully"
+        response["data"] = cursor.fetchall()
+    return jsonify(response)
+
+
 @app.route('/prod-registration/', methods=["POST"])
 def prod_registration():
     response = {}
@@ -115,11 +126,11 @@ def prod_registration():
     try:
         if request.method == "POST":
 
-            name = request.form['name']
-            price = request.form['price']
-            description = request.form['description']
-            prod_type = request.form['prod_type']
-            quantity = request.form['quantity']
+            name = request.json['name']
+            price = request.json['price']
+            description = request.json['description']
+            prod_type = request.json['prod_type']
+            quantity = request.json['quantity']
 
             with sqlite3.connect('shoprite.db') as conn:
                 cursor = conn.cursor()
