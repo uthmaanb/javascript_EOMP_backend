@@ -106,7 +106,7 @@ def user_registration():
             msg.body = "Welcome " + first_name + ". You have Successfully registered."
             mail.send(msg)
 
-        return redirect("/emailsent/%s" % email)
+        return redirect("https://murmuring-everglades-76424.herokuapp.com/show-users")
     else:
         return "Email not valid. Please enter a valid email address"
 
