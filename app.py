@@ -5,6 +5,9 @@ from flask_mail import Mail, Message
 
 
 # create class as part of flask requirements
+from werkzeug.utils import redirect
+
+
 class User(object):
     def __init__(self, user_id, username, password):
         self.id = user_id
@@ -102,7 +105,10 @@ def user_registration():
             msg = Message('Yo Bro', sender='cody01101101@gmail.com', recipients=[email])
             msg.body = "Welcome " + first_name + ". You have Successfully registered."
             mail.send(msg)
-        return response
+
+        return redirect("/emailsent/%s" % email)
+    else:
+        return "Email not valid. Please enter a valid email address"
 
 
 @app.route('/show-users/')
