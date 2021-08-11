@@ -78,12 +78,12 @@ def user_registration():
 
     if request.method == "POST":
 
-        username = request.json['username']
-        first_name = request.json['first_name']
-        last_name = request.json['last_name']
-        email = request.json['email']
-        password = request.json['password']
-        address = request.json['address']
+        username = request.form['username']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        password = request.form['password']
+        address = request.form['address']
 
         with sqlite3.connect('shoprite.db') as conn:
             cursor = conn.cursor()
