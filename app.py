@@ -154,7 +154,6 @@ def user_registration():
 
             else:
                 response['message'] = "Invalid Email Address"
-                return response
         except ValueError:
             pass
             # response['message'] = "Invalid ID Number"
