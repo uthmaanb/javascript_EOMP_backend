@@ -157,7 +157,8 @@ def registration():
             else:
                 response['message'] = "Invalid Email Address"
         except ValueError:
-            response['message'] = "Invalid ID Number"
+            pass
+            # response['message'] = "Invalid ID Number"
 
 
 @app.route('/show-users/')
