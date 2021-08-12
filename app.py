@@ -3,6 +3,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_mail import Mail, Message
 
+import re
+import rsaidnumber
+
 
 # create class as part of flask requirements
 from werkzeug.utils import redirect
@@ -75,12 +78,49 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 
+# @app.route('/user-registration/', methods=["POST"])
+# def user_registration():
+#     response = {}
+#
+#     if request.method == "POST":
+#
+#         username = request.form['username']
+#         first_name = request.form['first_name']
+#         last_name = request.form['last_name']
+#         email = request.form['email']
+#         password = request.form['password']
+#         address = request.form['address']
+#
+#         with sqlite3.connect('shoprite.db') as conn:
+#             cursor = conn.cursor()
+#             cursor.execute("INSERT INTO users("
+#                            "username,"
+#                            "first_name,"
+#                            "last_name,"
+#                            "email,"
+#                            "password,"
+#                            "address) VALUES(?, ?, ?, ?, ?, ?)",
+#                            (username, first_name, last_name, email, password, address))
+#             conn.commit()
+#             response["message"] = "success"
+#             response["status_code"] = 201
+#
+#             msg = Message('Yo Bro', sender='cody01101101@gmail.com', recipients=[email])
+#             msg.body = "Welcome " + first_name + ". You have Successfully registered."
+#             mail.send(msg)
+#
+#         # return redirect("/emailsent/%s" % email)
+#         return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+#     else:
+#         return "Email not valid. Please enter a valid email address"
+
+
+# a route with a function to register the users
 @app.route('/user-registration/', methods=["POST"])
-def user_registration():
+def registration():
     response = {}
 
     if request.method == "POST":
-
         username = request.form['username']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
@@ -88,40 +128,36 @@ def user_registration():
         password = request.form['password']
         address = request.form['address']
 
-        with sqlite3.connect('shoprite.db') as conn:
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO users("
-                           "username,"
-                           "first_name,"
-                           "last_name,"
-                           "email,"
-                           "password,"
-                           "address) VALUES(?, ?, ?, ?, ?, ?)",
-                           (username, first_name, last_name, email, password, address))
-            conn.commit()
-            response["message"] = "success"
-            response["status_code"] = 201
+        try:
+            regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'         # code to validate email entered
 
-            msg = Message('Yo Bro', sender='cody01101101@gmail.com', recipients=[email])
-            msg.body = "Welcome " + first_name + ". You have Successfully registered."
-            mail.send(msg)
+            # entry will only be accepted if email address and ID Number is valid
+            if re.search(regex, email):
 
-        # return redirect("/emailsent/%s" % email)
-        return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
-    else:
-        return "Email not valid. Please enter a valid email address"
+                with sqlite3.connect('shoprite.db') as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("INSERT INTO users("
+                                   "username,"
+                                   "first_name,"
+                                   "last_name,"
+                                   "email,"
+                                   "password,"
+                                   "address) VALUES(?, ?, ?, ?, ?, ?)",
+                                   (username, first_name, last_name, email, password, address))
+                    conn.commit()
 
+                msg = Message('Welcome To MyPOS', sender='cody01101101@gmail.com', recipients=[email])
+                msg.body = first_name + ' you have successfully registered.'
+                mail.send(msg)
 
-# app route that sends an email to users who registered
-# @app.route('/emailsent/<email>', methods=['GET'])
-# def sendemail(email):
-#     mail = Mail(app)
-#
-#     msg = Message('Hello Message', sender='cody01101101@gmail.com', recipients=[email])
-#     msg.body = "This is the email body after making some changes"
-#     mail.send(msg)
-#
-#     return "Thank you for registering."
+                response["message"] = "Success, Check Email"
+                response["status_code"] = 201
+                return response and redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+
+            else:
+                response['message'] = "Invalid Email Address"
+        except ValueError:
+            response['message'] = "Invalid ID Number"
 
 
 @app.route('/show-users/')
