@@ -2,11 +2,10 @@ import sqlite3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_mail import Mail, Message
-
+from werkzeug.utils import redirect
 import re
 
 # create class as part of flask requirements
-from werkzeug.utils import redirect
 
 
 class User(object):
@@ -126,37 +125,34 @@ def user_registration():
         password = request.form['password']
         address = request.form['address']
 
-        try:
-            regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'         # code to validate email entered
+        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'         # code to validate email entered
 
-            # entry will only be accepted if email address and ID Number is valid
-            if re.search(regex, email):
+        # entry will only be accepted if email address and ID Number is valid
+        if re.search(regex, email):
 
-                with sqlite3.connect('shoprite.db') as conn:
-                    cursor = conn.cursor()
-                    cursor.execute("INSERT INTO users("
-                                   "username,"
-                                   "first_name,"
-                                   "last_name,"
-                                   "email,"
-                                   "password,"
-                                   "address) VALUES(?, ?, ?, ?, ?, ?)",
-                                   (username, first_name, last_name, email, password, address))
-                    conn.commit()
+            with sqlite3.connect('shoprite.db') as conn:
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO users("
+                               "username,"
+                               "first_name,"
+                               "last_name,"
+                               "email,"
+                               "password,"
+                               "address) VALUES(?, ?, ?, ?, ?, ?)",
+                               (username, first_name, last_name, email, password, address))
+                conn.commit()
 
-                msg = Message('Welcome To MyPOS', sender='cody01101101@gmail.com', recipients=[email])
-                msg.body = first_name + ' you have successfully registered.'
-                mail.send(msg)
+            msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
+            msg.body = first_name + ' you have successfully registered.'
+            mail.send(msg)
 
-                response["message"] = "Success, Check Email"
-                response["status_code"] = 201
-                return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+            response["message"] = "Success, Check Email"
+            response["status_code"] = 201
+            return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
 
-            else:
-                response['message'] = "Invalid Email Address"
-        except ValueError:
-            pass
-            # response['message'] = "Invalid ID Number"
+        else:
+            response['message'] = "Invalid Email Address"
+
 
 
 @app.route('/show-users/')
