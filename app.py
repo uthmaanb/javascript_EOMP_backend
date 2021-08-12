@@ -154,7 +154,6 @@ def user_registration():
             response['message'] = "Invalid Email Address"
 
 
-
 @app.route('/show-users/')
 def show_users():
     response = {}
