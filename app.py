@@ -117,7 +117,7 @@ mail = Mail(app)
 
 # a route with a function to register the users
 @app.route('/user-registration/', methods=["POST"])
-def registration():
+def user_registration():
     response = {}
 
     if request.method == "POST":
