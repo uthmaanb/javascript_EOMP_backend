@@ -106,7 +106,7 @@ def user_registration():
             # msg.body = "Welcome " + first_name + ". You have Successfully registered."
             # mail.send(msg)
 
-        return response and redirect("/emailsent/%s" % email)
+        return redirect("/emailsent/%s" % email)
     else:
         return "Email not valid. Please enter a valid email address"
 
