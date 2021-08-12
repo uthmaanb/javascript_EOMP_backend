@@ -152,10 +152,11 @@ def user_registration():
 
                 response["message"] = "Success, Check Email"
                 response["status_code"] = 201
-                return response and redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+                return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
 
             else:
                 response['message'] = "Invalid Email Address"
+                return response
         except ValueError:
             pass
             # response['message'] = "Invalid ID Number"
