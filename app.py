@@ -148,7 +148,7 @@ def user_registration():
 
             response["message"] = "Success, Check Email"
             response["status_code"] = 201
-            return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+            return redirect('https://www.google.com/search?q=google&oq=GOOGLE&aqs=chrome.0.0i131i433i512l3j0i433i512l2j0i131i433i512l2j0i512.2563j0j15&sourceid=chrome&ie=UTF-8')
 
         else:
             response['message'] = "Invalid Email Address"
