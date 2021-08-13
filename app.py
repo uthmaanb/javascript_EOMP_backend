@@ -1,4 +1,6 @@
 import sqlite3
+from smtplib import SMTPRecipientsRefused
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_mail import Mail, Message
@@ -78,22 +80,19 @@ mail = Mail(app)
 # a route with a function to register the users
 @app.route('/user-registration/', methods=["POST"])
 def user_registration():
-    # response = {}
+    response = {}
 
-    if request.method == "POST":
-        username = request.form['username']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        email = request.form['email']
-        password = request.form['password']
-        address = request.form['address']
+    try:
+        if request.method == "POST":
+            username = request.form['username']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            email = request.form['email']
+            password = request.form['password']
+            address = request.form['address']
 
-        with sqlite3.connect('shoprite.db') as conn:
+            with sqlite3.connect('shoprite.db') as conn:
 
-            regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  # code to validate email entered
-
-            # entry will only be accepted if email address and ID Number is valid
-            if re.search(regex, email):
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO users("
                                "username,"
@@ -105,16 +104,18 @@ def user_registration():
                                (username, first_name, last_name, email, password, address))
                 conn.commit()
 
-            else:
-                redirect('shorturl.at/ehrAQ')
+            msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
+            msg.body = first_name + ' you have successfully registered.'
+            mail.send(msg)
 
-        msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
-        msg.body = first_name + ' you have successfully registered.'
-        mail.send(msg)
+            response["message"] = "Success, Check Email"
+            response["status_code"] = 201
+            return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
 
-        # response["message"] = "Success, Check Email"
-        # response["status_code"] = 201
-        return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+    except SMTPRecipientsRefused:
+        response['message'] = "Please enter a valid email address"
+        response['status_code'] = 400
+        return response
 
 
 @app.route('/show-users/')
