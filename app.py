@@ -125,12 +125,17 @@ def user_registration():
         password = request.form['password']
         address = request.form['address']
 
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'         # code to validate email entered
+        # regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'         # code to validate email entered
+        #
+        # # entry will only be accepted if email address and ID Number is valid
+        # if re.search(regex, email):
 
-        # entry will only be accepted if email address and ID Number is valid
-        if re.search(regex, email):
+        with sqlite3.connect('shoprite.db') as conn:
 
-            with sqlite3.connect('shoprite.db') as conn:
+            regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  # code to validate email entered
+
+            # entry will only be accepted if email address and ID Number is valid
+            if re.search(regex, email):
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO users("
                                "username,"
@@ -142,17 +147,20 @@ def user_registration():
                                (username, first_name, last_name, email, password, address))
                 conn.commit()
 
-            msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
-            msg.body = first_name + ' you have successfully registered.'
-            mail.send(msg)
+            else:
+                redirect('shorturl.at/ehrAQ')
 
-            response["message"] = "Success, Check Email"
-            response["status_code"] = 201
-            return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+        msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
+        msg.body = first_name + ' you have successfully registered.'
+        mail.send(msg)
 
-        else:
-            response['message'] = "Invalid Email Address"
-            return redirect('https://www.google.com/search?q=google&oq=GOOGLE&aqs=chrome.0.0i131i433i512l3j0i433i512l2j0i131i433i512l2j0i512.2563j0j15&sourceid=chrome&ie=UTF-8')
+        response["message"] = "Success, Check Email"
+        response["status_code"] = 201
+        return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+
+        # else:
+        #     response['message'] = "Invalid Email Address"
+        #     return redirect('https://www.google.com/search?q=google&oq=GOOGLE&aqs=chrome.0.0i131i433i512l3j0i433i512l2j0i131i433i512l2j0i512.2563j0j15&sourceid=chrome&ie=UTF-8')
 
 
 @app.route('/show-users/')
@@ -167,6 +175,19 @@ def show_users():
         response["description"] = "Displaying all products successfully"
         response["data"] = cursor.fetchall()
     return jsonify(response)
+
+
+@app.route('/delete-users/<int:user_id>')
+def delete_users(user_id):
+    response = {}
+    with sqlite3.connect("shoprite.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM users WHERE user_id=" + str(user_id))
+        conn.commit()
+        response['status_code'] = 200
+        response['message'] = "Product successfully deleted"
+
+    return response
 
 
 @app.route('/prod-registration/', methods=["POST"])
