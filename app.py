@@ -115,7 +115,7 @@ mail = Mail(app)
 # a route with a function to register the users
 @app.route('/user-registration/', methods=["POST"])
 def user_registration():
-    response = {}
+    # response = {}
 
     if request.method == "POST":
         username = request.form['username']
@@ -154,8 +154,8 @@ def user_registration():
         msg.body = first_name + ' you have successfully registered.'
         mail.send(msg)
 
-        response["message"] = "Success, Check Email"
-        response["status_code"] = 201
+        # response["message"] = "Success, Check Email"
+        # response["status_code"] = 201
         return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
 
         # else:
