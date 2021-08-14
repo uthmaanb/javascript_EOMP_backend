@@ -88,14 +88,14 @@ app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
 
 # email tings
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'cody01101101@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Polonykop100'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-
-mail = Mail(app)
+# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+# app.config['MAIL_PORT'] = 465
+# app.config['MAIL_USERNAME'] = 'cody01101101@gmail.com'
+# app.config['MAIL_PASSWORD'] = 'Polonykop100'
+# app.config['MAIL_USE_TLS'] = False
+# app.config['MAIL_USE_SSL'] = True
+#
+# mail = Mail(app)
 
 
 # a route with a function to register the users
