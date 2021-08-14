@@ -94,7 +94,7 @@ app.config['MAIL_USERNAME'] = 'cody01101101@gmail.com'
 app.config['MAIL_PASSWORD'] = 'Polonykop100'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['CORS_HEADERS'] = ['Content-Type']
+
 mail = Mail(app)
 
 
