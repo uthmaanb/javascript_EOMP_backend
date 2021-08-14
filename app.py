@@ -88,14 +88,14 @@ app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
 
 # email tings
-# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-# app.config['MAIL_PORT'] = 465
-# app.config['MAIL_USERNAME'] = 'cody01101101@gmail.com'
-# app.config['MAIL_PASSWORD'] = 'Polonykop100'
-# app.config['MAIL_USE_TLS'] = False
-# app.config['MAIL_USE_SSL'] = True
-#
-# mail = Mail(app)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'cody01101101@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Polonykop100'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+mail = Mail(app)
 
 
 # a route with a function to register the users
@@ -113,21 +113,24 @@ def user_registration():
         password = request.form['password']
         address = request.form['address']
 
-            # try:
-                # regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  # code to validate email entered
-                # # entry will only be accepted if email address and ID Number is valid
-                # if re.search(regex, email):
+        try:
+            regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  # code to validate email entered
+            # entry will only be accepted if email address and ID Number is valid
+            if re.search(regex, email):
 
-        query = ("INSERT INTO users("
-                 "username,"
-                 "first_name,"
-                 "last_name, "
-                 "email,"
-                 "password,"
-                 "address) VALUES(?, ?, ?, ?, ?, ?)")
-        values = username, first_name, last_name, email, password, address
-        db.insert(query, values)
+                query = ("INSERT INTO users("
+                         "username,"
+                         "first_name,"
+                         "last_name, "
+                         "email,"
+                         "password,"
+                         "address) VALUES(?, ?, ?, ?, ?, ?)")
+                values = username, first_name, last_name, email, password, address
+                db.insert(query, values)
 
+                msg = Message('Welcome To MyPOS', sender='cody01101101@gmail.com', recipients=[email])
+                msg.body = "Thank You for registering with us " + first_name + "." + " Don't forget your Username: " + username + " and " "Password: " + password + "."
+                mail.send(msg)
             #
             #         msg = Message('Welcome To MyPOS', sender='62545a@gmail.com', recipients=[email])
             #         msg.body = "Thank You for registering with us " + first_name + "." + " Don't forget your Username: " + username + " and " "Password: " + password + "."
@@ -160,13 +163,15 @@ def user_registration():
             # msg.body = first_name + ' you have successfully registered.'
             # mail.send(msg)
             #
-        response["message"] = "Success, Check Email"
-        response["status_code"] = 201
-            # return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+                response["message"] = "Success, Check Email"
+                response["status_code"] = 201
 
-    # except SMTPRecipientsRefused:
-    #     response['message'] = "Please enter a valid email address"
-    #     response['status_code'] = 400
+                    # return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+            else:
+                response['message'] = "aaakakakakaa"
+        except SMTPRecipientsRefused:
+            response['message'] = "Please enter a valid email address"
+            response['status_code'] = 400
         return response
 
 
