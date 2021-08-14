@@ -95,6 +95,7 @@ app.config['MAIL_PASSWORD'] = 'Polonykop100'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['CORS_HEADERS'] = ['Content-Type']
+mail = Mail(app)
 
 
 # a route with a function to register the users
@@ -103,39 +104,69 @@ def user_registration():
     response = {}
     db = Database()
 
-    # try:
-    if request.method == "POST":
-        username = request.form['username']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        email = request.form['email']
-        password = request.form['password']
-        address = request.form['address']
+    try:
+        if request.method == "POST":
+            username = request.form['username']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            email = request.form['email']
+            password = request.form['password']
+            address = request.form['address']
 
-        query = ("INSERT INTO users("
-                 "username,"
-                 "first_name,"
-                 "last_name,"
-                 "email,"
-                 "password,"
-                 "address) VALUES(?, ?, ?, ?, ?, ?)")
-        values = username, first_name, last_name, email, password, address
-        db.insert(query, values)
+            try:
+                regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  # code to validate email entered
+                # entry will only be accepted if email address and ID Number is valid
+                if re.search(regex, email):
 
-        mail = Mail(app)
+                    query = ("INSERT INTO users("
+                             "username,"
+                             "first_name,"
+                             "last_name, "
+                             "email,"
+                             "password,"
+                             "address) VALUES(?, ?, ?, ?, ?, ?)")
+                    values = username, first_name, last_name, email, password, address
+                    db.insert(query, values)
 
-        msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
-        msg.body = first_name + ' you have successfully registered.'
-        mail.send(msg)
+                    msg = Message('Welcome To MyPOS', sender='62545a@gmail.com', recipients=[email])
+                    msg.body = "Thank You for registering with us " + first_name + "." + " Don't forget your Username: " + username + " and " "Password: " + password + "."
+                    mail.send(msg)
 
-        response["message"] = "Success, Check Email"
-        response["status_code"] = 201
-        return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+                    response["message"] = "Success, Check Email"
+                    response["status_code"] = 201
+                    return redirect('https://optimistic-benz-002fcf.netlify.app/registered.html')
 
-    # except SMTPRecipientsRefused:
-    #     response['message'] = "Please enter a valid email address"
-    #     response['status_code'] = 400
-    #     return response
+                else:
+                    response['message'] = "Invalid Email Address"
+                    return redirect('https://optimistic-benz-002fcf.netlify.app/unsuccessful.html')
+            except ValueError:
+                response['message'] = "Invalid ID Number"
+                return redirect('https://optimistic-benz-002fcf.netlify.app/unsuccessful.html')
+
+            # query = ("INSERT INTO users("
+            #          "username,"
+            #          "first_name,"
+            #          "last_name, "
+            #          "email,"
+            #          "password,"
+            #          "address) VALUES(?, ?, ?, ?, ?, ?)")
+            # values = username, first_name, last_name, email, password, address
+            # db.insert(query, values)
+
+            # mail = Mail(app)
+            #
+            # msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
+            # msg.body = first_name + ' you have successfully registered.'
+            # mail.send(msg)
+            #
+            # response["message"] = "Success, Check Email"
+            # response["status_code"] = 201
+            # return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+
+    except SMTPRecipientsRefused:
+        response['message'] = "Please enter a valid email address"
+        response['status_code'] = 400
+        return response
 
 
 # end-point to view all products
