@@ -1,10 +1,8 @@
 import sqlite3
-from smtplib import SMTPRecipientsRefused
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_mail import Mail, Message
-from werkzeug.utils import redirect
+# from werkzeug.utils import redirect
 import re
 
 
@@ -91,7 +89,7 @@ app.config['SECRET_KEY'] = 'super-secret'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'cody01101101@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Polonykop100'
+app.config['MAIL_PASSWORD'] = 'agdpojipysvvqmoa'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
@@ -104,7 +102,6 @@ def user_registration():
     response = {}
     db = Database()
 
-    # try:
     if request.method == "POST":
         username = request.form['username']
         first_name = request.form['first_name']
@@ -113,8 +110,7 @@ def user_registration():
         password = request.form['password']
         address = request.form['address']
 
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  # code to validate email entered
-        # entry will only be accepted if email address and ID Number is valid
+        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         if re.search(regex, email):
 
             query = ("INSERT INTO users("
@@ -128,49 +124,15 @@ def user_registration():
             db.insert(query, values)
 
             msg = Message('Welcome To MyPOS', sender='cody01101101@gmail.com', recipients=[email])
-            msg.body = "Thank You for registering with us " + first_name + "." + " Don't forget your Username: " + username + " and " "Password: " + password + "."
+            msg.body = "Thank You for registering with us " + first_name
             mail.send(msg)
-            #
-            #         msg = Message('Welcome To MyPOS', sender='62545a@gmail.com', recipients=[email])
-            #         msg.body = "Thank You for registering with us " + first_name + "." + " Don't forget your Username: " + username + " and " "Password: " + password + "."
-            #         mail.send(msg)
-            #
-            #         response["message"] = "Success, Check Email"
-            #         response["status_code"] = 201
-            #         return redirect('https://www.youtube.com/watch?v=UJduRj3FJYc&ab_channel=Xzhee')
-            #
-            #     else:
-            #         response['message'] = "Invalid Email Address"
-            #         return redirect('https://youtu.be/POszCiLezbg?t=27')
-            # except ValueError:
-            #     response['message'] = "Invalid ID Number"
-            #     return redirect('https://www.youtube.com/')
 
-            # query = ("INSERT INTO users("
-            #          "username,"
-            #          "first_name,"
-            #          "last_name, "
-            #          "email,"
-            #          "password,"
-            #          "address) VALUES(?, ?, ?, ?, ?, ?)")
-            # values = username, first_name, last_name, email, password, address
-            # db.insert(query, values)
-
-            # mail = Mail(app)
-            #
-            # msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
-            # msg.body = first_name + ' you have successfully registered.'
-            # mail.send(msg)
-            #
             response["message"] = "Success, Check Email"
             response["status_code"] = 201
 
-                    # return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
         else:
             response['message'] = "aaakakakakaa"
-        # except SMTPRecipientsRefused:
-        #     response['message'] = "Please enter a valid email address"
-        #     response['status_code'] = 400
+
         return response
 
 
