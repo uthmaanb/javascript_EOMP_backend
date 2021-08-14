@@ -134,7 +134,7 @@ def user_registration():
 
                     response["message"] = "Success, Check Email"
                     response["status_code"] = 201
-                    return redirect('https://academy.lifechoices.co.za/login/index.php')
+                    return redirect('https://www.youtube.com/watch?v=UJduRj3FJYc&ab_channel=Xzhee')
 
                 else:
                     response['message'] = "Invalid Email Address"
