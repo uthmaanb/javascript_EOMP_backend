@@ -138,7 +138,7 @@ def user_registration():
 
                 else:
                     response['message'] = "Invalid Email Address"
-                    return redirect('https://www.google.com/search?q=no&oq=no&aqs=chrome.0.69i59j0i131i433i512j46i131i433i512j46i433i512j0i512j69i60l3.1662j0j7&sourceid=chrome&ie=UTF-8')
+                    return redirect('https://www.youtube.com/results?search_query=no')
             except ValueError:
                 response['message'] = "Invalid ID Number"
                 return redirect('https://www.youtube.com/')
