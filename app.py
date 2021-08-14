@@ -7,8 +7,6 @@ from flask_mail import Mail, Message
 from werkzeug.utils import redirect
 import re
 
-# create class as part of flask requirements
-
 
 class User(object):
     def __init__(self, user_id, username, password):
@@ -43,6 +41,28 @@ class CreateTable:
 
 
 CreateTable()
+
+
+# class for Database functions
+class Database(object):
+    # function to connect to Database and crete cursor
+    def __init__(self):
+        self.conn = sqlite3.connect('shoprite.db')
+        self.cursor = self.conn.cursor()
+
+    # function for INSERT AND UPDATE query
+    def insert(self, query, values):
+        self.cursor.execute(query, values)
+        self.conn.commit()
+
+    # function to fetch data for SELECT query
+    def fetch(self):
+        return self.cursor.fetchall()
+
+    # function for executing SELECT query
+    def select(self, query):
+        self.cursor.execute(query)
+        self.conn.commit()
 
 
 def fetch_users():
@@ -81,6 +101,7 @@ app.config['CORS_HEADERS'] = ['Content-Type']
 @app.route('/user-registration/', methods=["POST"])
 def user_registration():
     response = {}
+    db = Database()
 
     try:
         if request.method == "POST":
@@ -91,18 +112,15 @@ def user_registration():
             password = request.form['password']
             address = request.form['address']
 
-            with sqlite3.connect('shoprite.db') as conn:
-
-                cursor = conn.cursor()
-                cursor.execute("INSERT INTO users("
-                               "username,"
-                               "first_name,"
-                               "last_name,"
-                               "email,"
-                               "password,"
-                               "address) VALUES(?, ?, ?, ?, ?, ?)",
-                               (username, first_name, last_name, email, password, address))
-                conn.commit()
+            query = ("INSERT INTO users("
+                     "username,"
+                     "first_name,"
+                     "last_name,"
+                     "email,"
+                     "password,"
+                     "address) VALUES(?, ?, ?, ?, ?, ?)")
+            values = username, first_name, last_name, email, password, address
+            db.insert(query, values)
 
             mail = Mail(app)
 
@@ -120,59 +138,72 @@ def user_registration():
         return response
 
 
-@app.route('/show-users/')
+# end-point to view all products
+@app.route("/show-users/")
 def show_users():
     response = {}
+    db = Database()
 
-    with sqlite3.connect("shoprite.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users")
+    query = "SELECT * FROM  users"
+    db.select(query)
 
-        response["status_code"] = 200
-        response["description"] = "Displaying all products successfully"
-        response["data"] = cursor.fetchall()
+    response['status_code'] = 200
+    response['data'] = db.fetch()
+
     return jsonify(response)
 
 
-@app.route('/delete-users/<int:user_id>')
+# delete user from table
+@app.route("/delete-users/<int:user_id>")
 def delete_users(user_id):
-    response = {}
-    with sqlite3.connect("shoprite.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM users WHERE user_id=" + str(user_id))
-        conn.commit()
-        response['status_code'] = 200
-        response['message'] = "Product successfully deleted"
 
-    return response
+    response = {}
+    db = Database()
+
+    query = "DELETE FROM users WHERE user_id=" + str(user_id)
+    db.select(query)
+
+    # check if the id exists
+    if not id:
+        return "user does not exist"
+
+    else:
+        response['status_code'] = 200
+        response['message'] = "item deleted successfully."
+        return response
 
 
 @app.route('/prod-registration/', methods=["POST"])
 def prod_registration():
     response = {}
+    db = Database()
 
     try:
         if request.method == "POST":
 
-            name = request.json['name']
-            price = request.json['price']
-            description = request.json['description']
-            prod_type = request.json['prod_type']
-            quantity = request.json['quantity']
+            name = request.form['name']
+            price = request.form['price']
+            description = request.form['description']
+            prod_type = request.form['prod_type']
+            quantity = request.form['quantity']
 
-            with sqlite3.connect('shoprite.db') as conn:
-                cursor = conn.cursor()
-                cursor.execute("INSERT INTO products("
-                               "name,"
-                               "price,"
-                               "description,"
-                               "prod_type,"
-                               "quantity) VALUES(?, ?, ?, ?, ?)",
-                               (name, price, description, prod_type, quantity))
-                conn.commit()
+            try:
+                query = ("INSERT INTO products("
+                         "name,"
+                         "price,"
+                         "description,"
+                         "prod_type,"
+                         "quantity) VALUES(?, ?, ?, ?, ?)")
+                values = name, price, description, prod_type, quantity
+                db.insert(query, values)
                 response["message"] = "success"
                 response["status_code"] = 201
-            return response
+                return jsonify(response)
+
+            except ValueError:
+                return {
+                    "error": "failed to insert into DB"
+                }
 
     except ConnectionError as e:
         return e
@@ -180,31 +211,39 @@ def prod_registration():
         return e
 
 
-@app.route('/show-products/')
+# end-point to view all products
+@app.route("/show-products/")
 def show_products():
     response = {}
+    db = Database()
 
-    with sqlite3.connect("shoprite.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM products")
+    query = "SELECT * FROM  products"
+    db.select(query)
 
-        response["status_code"] = 200
-        response["description"] = "Displaying all products successfully"
-        response["data"] = cursor.fetchall()
+    response['status_code'] = 200
+    response['data'] = db.fetch()
+
     return jsonify(response)
 
 
-@app.route('/delete-products/<int:prod_id>')
+# delete products from table
+@app.route("/delete-products/<int:prod_id>")
 def delete_products(prod_id):
-    response = {}
-    with sqlite3.connect("shoprite.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM products WHERE prod_id=" + str(prod_id))
-        conn.commit()
-        response['status_code'] = 200
-        response['message'] = "Product successfully deleted"
 
-    return response
+    response = {}
+    db = Database()
+
+    query = "DELETE FROM products WHERE prod_id=" + str(prod_id)
+    db.select(query)
+
+    # check if the id exists
+    if not id:
+        return "product does not exist"
+
+    else:
+        response['status_code'] = 200
+        response['message'] = "item deleted successfully."
+        return response
 
 
 @app.route('/edit-prod/<int:prod_id>', methods=["PUT"])
