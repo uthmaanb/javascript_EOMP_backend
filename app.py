@@ -134,14 +134,14 @@ def user_registration():
 
                     response["message"] = "Success, Check Email"
                     response["status_code"] = 201
-                    return redirect('https://optimistic-benz-002fcf.netlify.app/registered.html')
+                    return redirect('https://academy.lifechoices.co.za/login/index.php')
 
                 else:
                     response['message'] = "Invalid Email Address"
-                    return redirect('https://optimistic-benz-002fcf.netlify.app/unsuccessful.html')
+                    return redirect('https://www.google.com/search?q=no&oq=no&aqs=chrome.0.69i59j0i131i433i512j46i131i433i512j46i433i512j0i512j69i60l3.1662j0j7&sourceid=chrome&ie=UTF-8')
             except ValueError:
                 response['message'] = "Invalid ID Number"
-                return redirect('https://optimistic-benz-002fcf.netlify.app/unsuccessful.html')
+                return redirect('https://www.youtube.com/')
 
             # query = ("INSERT INTO users("
             #          "username,"
