@@ -167,7 +167,7 @@ def user_registration():
     # except SMTPRecipientsRefused:
     #     response['message'] = "Please enter a valid email address"
     #     response['status_code'] = 400
-    return response
+        return response
 
 
 # end-point to view all products
