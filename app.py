@@ -2,7 +2,7 @@ import sqlite3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_mail import Mail, Message
-# from werkzeug.utils import redirect
+from werkzeug.utils import redirect
 import re
 
 
@@ -129,11 +129,13 @@ def user_registration():
 
             response["message"] = "Success, Check Email"
             response["status_code"] = 201
+            redirect('https://distracted-meninsky-b86e1a.netlify.app/index.html')
 
         else:
             response['message'] = "aaakakakakaa"
+            redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
 
-        return response
+        return redirect
 
 
 # end-point to view all products
