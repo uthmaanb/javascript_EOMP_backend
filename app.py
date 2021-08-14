@@ -104,15 +104,15 @@ def user_registration():
                                (username, first_name, last_name, email, password, address))
                 conn.commit()
 
-            mail = Mail(app)
+                mail = Mail(app)
 
-            msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
-            msg.body = first_name + ' you have successfully registered.'
-            mail.send(msg)
+                msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
+                msg.body = first_name + ' you have successfully registered.'
+                mail.send(msg)
 
-            response["message"] = "Success, Check Email"
-            response["status_code"] = 201
-            return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+                response["message"] = "Success, Check Email"
+                response["status_code"] = 201
+                return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
 
     except SMTPRecipientsRefused:
         response['message'] = "Please enter a valid email address"
