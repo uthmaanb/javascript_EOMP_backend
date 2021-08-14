@@ -129,13 +129,13 @@ def user_registration():
 
             response["message"] = "Success, Check Email"
             response["status_code"] = 201
-            redirect('https://distracted-meninsky-b86e1a.netlify.app/index.html')
+            return redirect('https://distracted-meninsky-b86e1a.netlify.app/index.html')
 
         else:
             response['message'] = "aaakakakakaa"
-            redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
+            return redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
 
-        return redirect
+        # return redirect
 
 
 # end-point to view all products
