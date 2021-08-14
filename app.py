@@ -104,44 +104,44 @@ def user_registration():
     response = {}
     db = Database()
 
-    try:
-        if request.method == "POST":
-            username = request.form['username']
-            first_name = request.form['first_name']
-            last_name = request.form['last_name']
-            email = request.form['email']
-            password = request.form['password']
-            address = request.form['address']
+    # try:
+    if request.method == "POST":
+        username = request.form['username']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        password = request.form['password']
+        address = request.form['address']
 
-            try:
-                regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  # code to validate email entered
-                # entry will only be accepted if email address and ID Number is valid
-                if re.search(regex, email):
+            # try:
+                # regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  # code to validate email entered
+                # # entry will only be accepted if email address and ID Number is valid
+                # if re.search(regex, email):
 
-                    query = ("INSERT INTO users("
-                             "username,"
-                             "first_name,"
-                             "last_name, "
-                             "email,"
-                             "password,"
-                             "address) VALUES(?, ?, ?, ?, ?, ?)")
-                    values = username, first_name, last_name, email, password, address
-                    db.insert(query, values)
-
-                    msg = Message('Welcome To MyPOS', sender='62545a@gmail.com', recipients=[email])
-                    msg.body = "Thank You for registering with us " + first_name + "." + " Don't forget your Username: " + username + " and " "Password: " + password + "."
-                    mail.send(msg)
-
-                    response["message"] = "Success, Check Email"
-                    response["status_code"] = 201
-                    return redirect('https://www.youtube.com/watch?v=UJduRj3FJYc&ab_channel=Xzhee')
-
-                else:
-                    response['message'] = "Invalid Email Address"
-                    return redirect('https://youtu.be/POszCiLezbg?t=27')
-            except ValueError:
-                response['message'] = "Invalid ID Number"
-                return redirect('https://www.youtube.com/')
+        query = ("INSERT INTO users("
+                 "username,"
+                 "first_name,"
+                 "last_name, "
+                 "email,"
+                 "password,"
+                 "address) VALUES(?, ?, ?, ?, ?, ?)")
+        values = username, first_name, last_name, email, password, address
+        db.insert(query, values)
+            #
+            #         msg = Message('Welcome To MyPOS', sender='62545a@gmail.com', recipients=[email])
+            #         msg.body = "Thank You for registering with us " + first_name + "." + " Don't forget your Username: " + username + " and " "Password: " + password + "."
+            #         mail.send(msg)
+            #
+            #         response["message"] = "Success, Check Email"
+            #         response["status_code"] = 201
+            #         return redirect('https://www.youtube.com/watch?v=UJduRj3FJYc&ab_channel=Xzhee')
+            #
+            #     else:
+            #         response['message'] = "Invalid Email Address"
+            #         return redirect('https://youtu.be/POszCiLezbg?t=27')
+            # except ValueError:
+            #     response['message'] = "Invalid ID Number"
+            #     return redirect('https://www.youtube.com/')
 
             # query = ("INSERT INTO users("
             #          "username,"
@@ -159,13 +159,13 @@ def user_registration():
             # msg.body = first_name + ' you have successfully registered.'
             # mail.send(msg)
             #
-            # response["message"] = "Success, Check Email"
-            # response["status_code"] = 201
+        response["message"] = "Success, Check Email"
+        response["status_code"] = 201
             # return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
 
-    except SMTPRecipientsRefused:
-        response['message'] = "Please enter a valid email address"
-        response['status_code'] = 400
+    # except SMTPRecipientsRefused:
+    #     response['message'] = "Please enter a valid email address"
+    #     response['status_code'] = 400
         return response
 
 
