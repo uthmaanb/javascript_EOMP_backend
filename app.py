@@ -127,6 +127,7 @@ def user_registration():
                  "address) VALUES(?, ?, ?, ?, ?, ?)")
         values = username, first_name, last_name, email, password, address
         db.insert(query, values)
+
             #
             #         msg = Message('Welcome To MyPOS', sender='62545a@gmail.com', recipients=[email])
             #         msg.body = "Thank You for registering with us " + first_name + "." + " Don't forget your Username: " + username + " and " "Password: " + password + "."
@@ -166,7 +167,7 @@ def user_registration():
     # except SMTPRecipientsRefused:
     #     response['message'] = "Please enter a valid email address"
     #     response['status_code'] = 400
-        return response
+    return response
 
 
 # end-point to view all products
