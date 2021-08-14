@@ -103,39 +103,39 @@ def user_registration():
     response = {}
     db = Database()
 
-    try:
-        if request.method == "POST":
-            username = request.form['username']
-            first_name = request.form['first_name']
-            last_name = request.form['last_name']
-            email = request.form['email']
-            password = request.form['password']
-            address = request.form['address']
+    # try:
+    if request.method == "POST":
+        username = request.form['username']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        password = request.form['password']
+        address = request.form['address']
 
-            query = ("INSERT INTO users("
-                     "username,"
-                     "first_name,"
-                     "last_name,"
-                     "email,"
-                     "password,"
-                     "address) VALUES(?, ?, ?, ?, ?, ?)")
-            values = username, first_name, last_name, email, password, address
-            db.insert(query, values)
+        query = ("INSERT INTO users("
+                 "username,"
+                 "first_name,"
+                 "last_name,"
+                 "email,"
+                 "password,"
+                 "address) VALUES(?, ?, ?, ?, ?, ?)")
+        values = username, first_name, last_name, email, password, address
+        db.insert(query, values)
 
-            mail = Mail(app)
+        mail = Mail(app)
 
-            msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
-            msg.body = first_name + ' you have successfully registered.'
-            mail.send(msg)
+        msg = Message('Welcome', sender='cody01101101@gmail.com', recipients=[email])
+        msg.body = first_name + ' you have successfully registered.'
+        mail.send(msg)
 
-            response["message"] = "Success, Check Email"
-            response["status_code"] = 201
-            return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
+        response["message"] = "Success, Check Email"
+        response["status_code"] = 201
+        return redirect('https://murmuring-everglades-76424.herokuapp.com/show-users/')
 
-    except SMTPRecipientsRefused:
-        response['message'] = "Please enter a valid email address"
-        response['status_code'] = 400
-        return response
+    # except SMTPRecipientsRefused:
+    #     response['message'] = "Please enter a valid email address"
+    #     response['status_code'] = 400
+    #     return response
 
 
 # end-point to view all products
