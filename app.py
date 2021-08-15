@@ -153,8 +153,9 @@ def login():
             if request.form['username'] == i[1] and request.form['password'] == i[5]:
                 response['message'] = "Login successful"
                 response['status_code'] = 200
-                print(data)
-        return response
+                return response and redirect('https://www.google.com/search?q=success&oq=success&aqs=chrome..69i57j46i433i512j0i433i512l2j0i131i433i512j0i433i512l2j69i60.2690j0j7&sourceid=chrome&ie=UTF-8')
+            else:
+                redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
 
 
 # end-point to view all products
