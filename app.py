@@ -152,9 +152,11 @@ def login():
         if request.form['username'] == i[1] and request.form['password'] == i[5]:
             response['message'] = "Login successful"
             response['status_code'] = 200
-            return response and redirect('https://www.youtube.com/watch?v=o2weDmBXfik&ab_channel=MarkAngelComedy')
+            # and redirect('https://www.youtube.com/watch?v=o2weDmBXfik&ab_channel=MarkAngelComedy')
         else:
-            redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
+            response['message'] = 'unsuccessful'
+            # redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
+    return response
 
 
 # end-point to view all products
