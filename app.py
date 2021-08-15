@@ -138,24 +138,23 @@ def user_registration():
         # return redirect
 
 
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET'])
 def login():
     response = {}
     db = Database()
 
-    if request.method == "GET":
-        query = "SELECT * FROM  users"
-        db.select(query)
-        data = db.fetch()
+    query = "SELECT * FROM  users"
+    db.select(query)
+    data = db.fetch()
 
-        for i in data:
-            print(i)
-            if request.form['username'] == i[1] and request.form['password'] == i[5]:
-                response['message'] = "Login successful"
-                response['status_code'] = 200
-                return response and redirect('https://www.youtube.com/watch?v=o2weDmBXfik&ab_channel=MarkAngelComedy')
-            else:
-                redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
+    for i in data:
+        print(i)
+        if request.form['username'] == i[1] and request.form['password'] == i[5]:
+            response['message'] = "Login successful"
+            response['status_code'] = 200
+            return response and redirect('https://www.youtube.com/watch?v=o2weDmBXfik&ab_channel=MarkAngelComedy')
+        else:
+            redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
 
 
 # end-point to view all products
