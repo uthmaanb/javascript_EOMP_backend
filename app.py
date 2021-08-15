@@ -138,6 +138,25 @@ def user_registration():
         # return redirect
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    response = {}
+    db = Database()
+
+    if request.method == "GET":
+        query = "SELECT * FROM  users"
+        db.select(query)
+        data = db.fetch()
+
+        for i in data:
+            print(i)
+            if request.form['username'] == i[1] and request.form['password'] == i[5]:
+                response['message'] = "Login successful"
+                response['status_code'] = 200
+                print(data)
+        return response
+
+
 # end-point to view all products
 @app.route("/show-users/")
 def show_users():
