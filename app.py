@@ -138,26 +138,45 @@ def user_registration():
         # return redirect
 
 
-@app.route('/login/', methods=['GET'])
+@app.route('/login/', methods=['POST'])
 def login():
     response = {}
-    db = Database()
+    # db = Database()
 
-    query = "SELECT * FROM  users"
-    db.select(query)
-    data = db.fetch()
+    # query = "SELECT * FROM  users"
+    # db.select(query)
+    # data = db.fetch()
 
-    for i in data:
-        print(i)
-        if request.form['username'] == i[1] and request.form['password'] == i[5]:
-            response['message'] = "Login successful"
-            response['status_code'] = 200
-            # print(data)
-            # and redirect('https://www.youtube.com/watch?v=o2weDmBXfik&ab_channel=MarkAngelComedy')
+    # for i in data:
+    #     print(i)
+    #     if request.form['username'] == i[1] and request.form['password'] == i[5]:
+    #         response['message'] = "Login successful"
+    #         response['status_code'] = 200
+    #         # print(data)
+    #         # and redirect('https://www.youtube.com/watch?v=o2weDmBXfik&ab_channel=MarkAngelComedy')
+    #     else:
+    #         response['message'] = 'unsuccessful'
+    #         # redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
+    #     return response
+
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        conn = sqlite3.connect("shoprite.db")
+        c = conn.cursor()
+        statement = (f"SELECT * FROM users WHERE username='{username}' and password ="
+                     f"'{password}'")
+        c.execute(statement)
+        if not c.fetchone():
+            response['message'] = "failed"
+            response["status_code"] = 401
+            return response
         else:
-            response['message'] = 'unsuccessful'
-            # redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
-        return response
+            response['message'] = "welcome admin user"
+            response["status_code"] = 201
+            return response
+    else:
+        return "wrong method"
 
 
 # end-point to view all products
