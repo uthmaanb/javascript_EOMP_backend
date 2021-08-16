@@ -143,8 +143,8 @@ def login():
     response = {}
 
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.json["username"]
+        password = request.json["password"]
         conn = sqlite3.connect("shoprite.db")
         c = conn.cursor()
         statement = (f"SELECT * FROM users WHERE username='{username}' and password ="
@@ -153,11 +153,11 @@ def login():
         if not c.fetchone():
             response['message'] = "failed"
             response["status_code"] = 401
-            return redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
+            return response
         else:
             response['message'] = "welcome admin user"
             response["status_code"] = 201
-            return redirect('https://distracted-meninsky-b86e1a.netlify.app/veiwprod.html')
+            return response
     else:
         return "wrong method"
 
