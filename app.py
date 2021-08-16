@@ -157,7 +157,7 @@ def login():
         else:
             response['message'] = 'unsuccessful'
             # redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
-        return jsonify(response)
+        return response
 
 
 # end-point to view all products
