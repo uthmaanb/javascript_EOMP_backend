@@ -160,8 +160,8 @@ def login():
     #     return response
 
     if request.method == "POST":
-        username = request.json["username"]
-        password = request.json["password"]
+        username = request.form["username"]
+        password = request.form["password"]
         conn = sqlite3.connect("shoprite.db")
         c = conn.cursor()
         statement = (f"SELECT * FROM users WHERE username='{username}' and password ="
