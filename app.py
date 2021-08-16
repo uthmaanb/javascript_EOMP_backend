@@ -153,9 +153,11 @@ def login():
         if not c.fetchone():
             response['message'] = "failed"
             response["status_code"] = 401
+            return redirect('https://youtu.be/cMTAUr3Nm6I?t=31')
         else:
             response['message'] = "welcome admin user"
             response["status_code"] = 201
+            return redirect('https://distracted-meninsky-b86e1a.netlify.app/veiwprod.html')
     else:
         return "wrong method"
 
