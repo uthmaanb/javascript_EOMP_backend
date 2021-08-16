@@ -68,7 +68,7 @@ class Database(object):
 def fetch_users():
     conn = sqlite3.connect('shoprite.db')
     cursor = conn.cursor()
-    with sqlite3.connect('shoprite.db') as conn:
+    with sqlite3.connect('shoprite.db'):
         cursor.execute("SELECT * FROM users")
         user = cursor.fetchall()
 
@@ -86,10 +86,10 @@ user_table = {u.username: u for u in users}
 userid_table = {u.id: u for u in users}
 
 
-def authenticate(self, username, password):
-    self.user = user_table.get(username, None)
-    if self.user and hmac.compare_digest(self.user.password.encode('utf-8'), password.encode('utf-8')):
-        return self.user
+def authenticate(username, password):
+    user = user_table.get(username, None)
+    if user and hmac.compare_digest(user.password.encode('utf-8'), password.encode('utf-8')):
+        return user
 
 
 def identity(payload):
@@ -299,7 +299,7 @@ def delete_products(prod_id):
 def edit_products(prod_id):
     response = {}
     if request.method == "PUT":
-        with sqlite3.connect("shoprite.db") as conn:
+        with sqlite3.connect("shoprite.db"):
             incoming_data = dict(request.json)
             put_data = {}
 
