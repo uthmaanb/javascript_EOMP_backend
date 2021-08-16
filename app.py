@@ -4,6 +4,8 @@ from flask_cors import CORS
 from flask_mail import Mail, Message
 from werkzeug.utils import redirect
 import re
+from flask_jwt import JWT, jwt_required, current_identity
+import hmac
 
 
 class User(object):
@@ -80,6 +82,21 @@ def fetch_users():
 users = fetch_users()
 
 
+user_table = {u.username: u for u in users}
+userid_table = {u.id: u for u in users}
+
+
+def authenticate(self, username, password):
+    self.user = user_table.get(username, None)
+    if self.user and hmac.compare_digest(self.user.password.encode('utf-8'), password.encode('utf-8')):
+        return self.user
+
+
+def identity(payload):
+    user_id = payload['identity']
+    return userid_table.get(user_id, None)
+
+
 app = Flask(__name__)
 CORS(app)
 app.debug = True
@@ -94,6 +111,14 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
 mail = Mail(app)
+
+jwt = JWT(app, authenticate, identity)
+
+
+@app.route('/protected')
+@jwt_required()
+def protected():
+    return '%s' % current_identity
 
 
 # a route with a function to register the users
