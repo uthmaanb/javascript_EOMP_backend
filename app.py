@@ -153,11 +153,9 @@ def login():
         if not c.fetchone():
             response['message'] = "failed"
             response["status_code"] = 401
-            return response
         else:
             response['message'] = "welcome admin user"
             response["status_code"] = 201
-            return response
     else:
         return "wrong method"
 
