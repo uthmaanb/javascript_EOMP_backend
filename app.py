@@ -152,7 +152,7 @@ def login():
         if request.form['username'] == i[1] and request.form['password'] == i[5]:
             response['message'] = "Login successful"
             response['status_code'] = 200
-            print(data)
+            # print(data)
             # and redirect('https://www.youtube.com/watch?v=o2weDmBXfik&ab_channel=MarkAngelComedy')
         else:
             response['message'] = 'unsuccessful'
