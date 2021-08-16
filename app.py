@@ -138,7 +138,7 @@ def user_registration():
         # return redirect
 
 
-@app.route('/login/', methods=['post'])
+@app.route('/login/', methods=['GET'])
 def login():
     response = {}
     db = Database()
