@@ -1,4 +1,6 @@
 import sqlite3
+from datetime import timedelta
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_mail import Mail, Message
@@ -101,6 +103,7 @@ app = Flask(__name__)
 CORS(app)
 app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
+app.config["JWT_EXPIRATION_DELTA"] = timedelta(days=1)
 
 # email tings
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
